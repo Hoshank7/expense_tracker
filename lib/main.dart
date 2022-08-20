@@ -9,7 +9,6 @@ import 'package:expense_tracker/settings.dart';
 import 'package:expense_tracker/trends.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:intl/intl.dart';
 import 'package:pie_chart/pie_chart.dart' as pie;
 
 void main() {
@@ -35,7 +34,7 @@ class MyAppState extends State<MyApp> {
   String finalDate =
       '';// final date used in readData() sql, date of the first day of next month
 
-  String todayExpensesValue= '0';
+
 
 // Functions:
 
@@ -69,12 +68,7 @@ class MyAppState extends State<MyApp> {
     });
   }
 
-
-
-  Map<String,double> expenseCategories= {
-    'Fuel': 0.0,'Grocery': 0.0,'Cafe': 0.0,'Restaurant': 0.0,'Shopping': 0.0,
-    'Medicine': 0.0,'GYM': 0.0,'Sports': 0.0,'Parking': 0.0,'Utilities': 0.0,'Mobile Bill': 0.0,'Other': 0.0 } ;
-
+  Map<String, double> catMap={'Types': 0};
 
   getCategories() async {
 
@@ -83,110 +77,17 @@ class MyAppState extends State<MyApp> {
 
     var categoriesList= expenseCat.toList();
 
-    for (var element in categoriesList) {
-      if(element['category']== 'Fuel') {
-        expenseCategories.update('Fuel', (value) => element['SUM(amount)']);
-      }
-      if(element['category']== 'Grocery') {
-        expenseCategories.update('Grocery', (value) => element['SUM(amount)']);
-      }
-      if(element['category']== 'Cafe') {
-        expenseCategories.update('Cafe', (value) => element['SUM(amount)']);
-      }
-      if(element['category']== 'Restaurant') {
-        expenseCategories.update('Restaurant', (value) => element['SUM(amount)']);
-      }
-      if(element['category']== 'Shopping') {
-        expenseCategories.update('Shopping', (value) => element['SUM(amount)']);
-      }
-      if(element['category']== 'Medicine') {
-        expenseCategories.update('Medicine', (value) => element['SUM(amount)']);
-      }
-      if(element['category']== 'GYM') {
-        expenseCategories.update('GYM', (value) => element['SUM(amount)']);
-      }
-      if(element['category']== 'Sports') {
-        expenseCategories.update('Sports', (value) => element['SUM(amount)']);
-      }
-      if(element['category']== 'Parking') {
-        expenseCategories.update('Parking', (value) => element['SUM(amount)']);
-      }
-      if(element['category']== 'Utilities') {
-        expenseCategories.update('Utilities', (value) => element['SUM(amount)']);
-      }
-      if(element['category']== 'Mobile Bill') {
-        expenseCategories.update('Mobile Bill', (value) => element['SUM(amount)']);
-      }
-      if(element['category']== 'Other') {
-        expenseCategories.update('Other', (value) => element['SUM(amount)']);
-      }
+    int i=1;
+    while(i<categoriesList.length) {
+        catMap[categoriesList.elementAt(i)['category']] = categoriesList.elementAt(i)['SUM(amount)'];
+        i++;
     }
+    print('Cat Map : $catMap');
   }
 
-  List<BarChartGroupData> barData= [
-    BarChartGroupData(x: 0, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 1, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 2, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 3, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 4, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 5, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 6, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 7, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 8, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 9, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 10, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 11, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 12, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 13, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 14, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 15, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 16, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 17, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 18, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 19, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 20, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 21, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 22, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 23, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 24, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 25, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 26, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 27, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 28, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 29, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 30, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-    BarChartGroupData(x: 31, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-
-  ];
-
-  List<BarChartGroupData> monthlyBarData= [
-  BarChartGroupData(x: 0, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 1, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 2, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 3, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 4, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 5, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 6, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 7, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 8, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 9, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 10, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 11, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)]),
-  BarChartGroupData(x: 12, groupVertically: false, barRods: [BarChartRodData(fromY: 0,toY: 0)])];
+  double todayExpensesValue= 0;
 
   addExpensesList() async {
-    List expenses = await sqlDB.readData('''
-                        SELECT date,SUM(amount) 
-                        FROM expensesTable 
-                        WHERE date BETWEEN "$firstDate" AND "$finalDate" 
-                        GROUP BY date''');
-
-    List monthlyExpenses = await sqlDB.readData('''
-                        SELECT SUBSTR(date,6,2) as Month,SUM(amount) 
-                        FROM expensesTable 
-                        WHERE date BETWEEN "$startOfYear" AND "$endOfYear" 
-                        GROUP BY Month''');
-
     List todayExpenses= await sqlDB.readData('''
                         SELECT SUM(amount) 
                         FROM expensesTable 
@@ -195,91 +96,40 @@ class MyAppState extends State<MyApp> {
 
     var todayExpensesList= todayExpenses.toList();
 
-    var expensesList = expenses.toList();
-
-    var monthlyExpensesList= monthlyExpenses.toList();
-
-
     todayExpensesList.forEach((element) {
       if(element['SUM(amount)']!= null) {
-        todayExpensesValue=element['SUM(amount)'].toString();
+        todayExpensesValue=element['SUM(amount)'];
+      }
     }
-    });
-
-    expensesList.forEach((element) {
-      int i=1;
-      while(i<32) {
-        if (element['date'] ==
-              '${DateTime.now().year}/${DateTime.now().month}/$i') {
-          setState(() {
-            barData[i]=BarChartGroupData(x: i,groupVertically: false,barRods: [BarChartRodData(fromY:0, toY: element['SUM(amount)'])]);
-                });
-             //barData[i]=BarChartGroupData(x: i,groupVertically: false,barRods: [BarChartRodData(fromY:0, toY: element['SUM(amount)'])]);
-             break;
-         } else {
-          i++;
-        }
-      }
-
-      print('monthly expenses are: $monthlyExpensesList');
-
-      monthlyExpensesList.forEach((element) {
-        if (element['Month']=='1/') {
-          monthlyBarData[1]=BarChartGroupData(x: 1,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-        if (element['Month']=='2/') {
-          monthlyBarData[2]=BarChartGroupData(x: 2,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-        if (element['Month']=='3/') {
-          monthlyBarData[3]=BarChartGroupData(x: 3,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-        if (element['Month']=='4/') {
-          monthlyBarData[4]=BarChartGroupData(x: 4,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-        if (element['Month']=='5/') {
-          monthlyBarData[5]=BarChartGroupData(x: 5,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-        if (element['Month']=='6/') {
-          monthlyBarData[6]=BarChartGroupData(x: 6,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-        if (element['Month']=='7/') {
-          monthlyBarData[7]=BarChartGroupData(x: 7,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-        if (element['Month']=='8/') {
-          monthlyBarData[8]=BarChartGroupData(x: 8,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-        if (element['Month']=='9/') {
-          monthlyBarData[9]=BarChartGroupData(x: 9,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-        if (element['Month']=='10') {
-          monthlyBarData[10]=BarChartGroupData(x: 10,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-        if (element['Month']=='11') {
-          monthlyBarData[11]=BarChartGroupData(x: 11,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-        if (element['Month']=='12') {
-          monthlyBarData[12]=BarChartGroupData(x: 12,groupVertically: false,barRods: [BarChartRodData(fromY: 0, toY: element['SUM(amount)'])]);
-        }
-
-      }
-      );
-      },
     );
   }
 
   String? targetExpense ;
-  String? selectedCurrency;
-  double allowedSpending= 0 ;
+  String? selectedCurrency='';
+  double availableFunds= 0 ;
+  double allowedSpendingToday= 0;
 
+  // Below getSettings function is used to find allowed spending too
   getSettings() async {
     List settingsData= await sqlDB.readData('SELECT * FROM settingsTable');
-    List settingsList= settingsData.toList();
+    List totalExpenses = await sqlDB.readData(
+        "SELECT SUM(amount) FROM expensesTable WHERE date BETWEEN '$firstDate' AND '$finalDate'");
 
-    targetExpense=settingsList.elementAt(0)['target'].toString();
-    selectedCurrency=settingsList.elementAt(0)['currency'];
-    allowedSpending=(settingsList.elementAt(0)['target']/30) * duration;
+    targetExpense=settingsData.elementAt(0)['target'].toString();
+    setState((){
+    selectedCurrency=settingsData.elementAt(0)['currency'];
+    });
 
-    print('Settings List: $settingsList');
+    availableFunds=(settingsData.elementAt(0)['target']/30) * duration;
+    double x= availableFunds-totalExpenses.elementAt(0)['SUM(amount)'];
+
+    if(x>0){
+      setState(() {
+        allowedSpendingToday=x;
+      });
+    }
+
+    print('Settings Were Obtained ========= ');
   }
 
   Widget bottomMonthTitles(double value, TitleMeta meta) {
@@ -321,15 +171,21 @@ class MyAppState extends State<MyApp> {
   Future<List<Map>> readData() async {
     List<Map> response = await sqlDB.readData(
         "SELECT SUM(amount) FROM expensesTable WHERE date BETWEEN '$firstDate' AND '$finalDate'");
+
+      if(response.isEmpty) {
+        int insert = sqlDB.insertData('''
+                        INSERT INTO expensesTable ('date','amount') 
+                        VALUES ('${DateTime.now().year}/${DateTime.now().month}/1', '0')''');
+        print(insert);
+    }
     return response;
   }
-
 
   @override
   void initState() {
     super.initState();
     //Future.delayed(Duration.zero, () => addExpensesList());
-    WidgetsBinding.instance.addPostFrameCallback((_) => addExpensesList());
+    WidgetsBinding.instance.addPostFrameCallback((_) => getSettings());
   }
 
   @override
@@ -339,34 +195,40 @@ class MyAppState extends State<MyApp> {
     getCurrentDate();
     calcDays();
     getCategories();
-    getSettings();
-    //addExpensesList();
+    //getSettings();
+    addExpensesList();
     int navBarIndex= 0;
 
     return MaterialApp(
-      theme: ThemeData(fontFamily: 'DoppioOne-Regular'),
+      theme: ThemeData(fontFamily: 'RobotoCondensed-Light'),
       home: Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Input()),
+                MaterialPageRoute(builder: (context) =>  Input()),
               );
             },
-            backgroundColor: Colors.blueAccent,
+            backgroundColor: Colors.blueGrey,
             child: Icon(Icons.add),
           ),
           backgroundColor: Colors.blueGrey[50],
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             currentIndex: navBarIndex,
-            backgroundColor: Colors.red[700],
+            backgroundColor: Colors.red[900],
             unselectedItemColor: Colors.white54,
             selectedItemColor: Colors.white,
             onTap: (index) {
               setState((){
                 navBarIndex=index;
               });
+              if(navBarIndex == 0){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyApp()),
+                );
+              }
               if(navBarIndex == 1){
                 Navigator.push(
                   context,
@@ -380,9 +242,11 @@ class MyAppState extends State<MyApp> {
                 );
               }
               if(navBarIndex == 3){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Edit()),
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Settings(
+                  target: targetExpense,
+                  currency: selectedCurrency,
+                ),
+                ),
                 );
               }
             },
@@ -404,29 +268,32 @@ class MyAppState extends State<MyApp> {
             ],
           ),
           appBar: AppBar(
-            actions: [IconButton(onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Edit()),
-              );
-            },
-                icon: Icon(Icons.edit_note_outlined,
-                size: 40,)
-            )
-            ],
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Settings(
-                    target: targetExpense,
-                    currency: selectedCurrency,
-                  ),
-                  ),
-                  );
-                },
-                icon: Icon(Icons.settings,
-                size: 38,)),
-            title:  Center(child: Text('My Expense Tracker',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
-            backgroundColor: Colors.red[700],
+            // actions: [IconButton(onPressed: () {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => const Edit()),
+            //   );
+            // },
+            //     icon: Icon(Icons.edit_note_outlined,
+            //     size: 40,)
+            // )
+            // ],
+            // leading: IconButton(
+            //     onPressed: () {
+            //       Navigator.of(context).push(MaterialPageRoute(builder: (context) => Settings(
+            //         target: targetExpense,
+            //         currency: selectedCurrency,
+            //       ),
+            //       ),
+            //       );
+            //     },
+            //     icon: Icon(Icons.settings,
+            //     size: 38,)),
+            title:  Center(child: Text('My Expense Tracker',style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white ),)),
+            backgroundColor: Colors.red[900],
           ),
           body: Container(
             child: ListView(
@@ -439,14 +306,15 @@ class MyAppState extends State<MyApp> {
                         return Column(
                           children: [
                             SizedBox(
-                              height: screenH * 0.01,
+                              height: screenH * 0.02,
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Card(
                                   shape: RoundedRectangleBorder(
                                     side: BorderSide(
-                                      color: Colors.black12
+                                      color: Colors.black26
                                     ),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -461,7 +329,7 @@ class MyAppState extends State<MyApp> {
                                             height: screenH * 0.01,
                                           ),
                                           Text('Current Month Expenses',
-                                              style: TextStyle(fontSize: 14,color: Colors.teal.shade700,fontWeight: FontWeight.bold)
+                                              style: TextStyle(fontSize: 14,color: Colors.blueGrey[700],fontWeight: FontWeight.bold)
                                           ),
                                           SizedBox(
                                             height: screenH * 0.01,
@@ -473,13 +341,14 @@ class MyAppState extends State<MyApp> {
                                       ),
                                     )
                                 ),
+                                //Space Between Current Month Expenses and Today Expenses
                                 SizedBox(
-                                  width: screenW * 0.01,
+                                  width: screenW * 0.001,
                                 ),
                                 Card(
                                     shape: RoundedRectangleBorder(
                                       side: BorderSide(
-                                          color: Colors.black12
+                                          color: Colors.black26
                                       ),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -494,13 +363,13 @@ class MyAppState extends State<MyApp> {
                                             height: screenH * 0.01,
                                           ),
                                           Text('Total Expenses Today',
-                                              style: TextStyle(fontSize: 14,color: Colors.teal.shade700,fontWeight: FontWeight.bold)
+                                              style: TextStyle(fontSize: 14,color: Colors.blueGrey[700],fontWeight: FontWeight.bold)
                                           ),
                                           SizedBox(
                                             height: screenH * 0.01,
                                           ),
                                           Text(
-                                              '$todayExpensesValue $selectedCurrency',
+                                              '${(todayExpensesValue ~/1).toString()} $selectedCurrency',
                                               style: TextStyle(fontSize: 20)
                                           ),
                                         ],
@@ -510,11 +379,12 @@ class MyAppState extends State<MyApp> {
                               ],
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Card(
                                     shape: RoundedRectangleBorder(
                                       side: BorderSide(
-                                          color: Colors.black12
+                                          color: Colors.black26
                                       ),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -530,7 +400,7 @@ class MyAppState extends State<MyApp> {
                                             height: screenH * 0.01,
                                           ),
                                           Text('Current Month Average',
-                                            style: TextStyle(fontSize: 14,color: Colors.teal.shade700,fontWeight: FontWeight.bold),
+                                            style: TextStyle(fontSize: 14,color: Colors.blueGrey[700],fontWeight: FontWeight.bold),
                                           ),
                                           SizedBox(
                                             height: screenH * 0.01,
@@ -540,14 +410,15 @@ class MyAppState extends State<MyApp> {
                                               style: TextStyle(fontSize: 20)),
                                         ],
                                       ),
-                                    )),
+                                    ),
+                                ),
                                 SizedBox(
-                                  width: screenW * 0.01,
+                                  width: screenW * 0.001,
                                 ),
                                 Card(
                                     shape: RoundedRectangleBorder(
                                       side: BorderSide(
-                                          color: Colors.black12
+                                          color: Colors.black26
                                       ),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -562,14 +433,14 @@ class MyAppState extends State<MyApp> {
                                           SizedBox(
                                             height: screenH * 0.01,
                                           ),
-                                          Text('Available Allowance Today',
-                                              style: TextStyle(fontSize: 14,color: Colors.teal.shade700,fontWeight: FontWeight.bold)
+                                          Text("Today's Allowance",
+                                              style: TextStyle(fontSize: 14,color: Colors.blueGrey[700],fontWeight: FontWeight.bold)
                                           ),
                                           SizedBox(
                                             height: screenH * 0.01,
                                           ),
                                           Text(
-                                              '${(allowedSpending-snapshot.data![0]['SUM(amount)'])~/1} $selectedCurrency',
+                                              '${allowedSpendingToday~/1} $selectedCurrency',
                                               style: TextStyle(fontSize: 20)),
                                         ],
                                       ),
@@ -577,50 +448,80 @@ class MyAppState extends State<MyApp> {
                               ],
                             ),
                             SizedBox(
-                              height: screenH * 0.04,
+                              height: screenH * 0.06,
                             ),
-                            Container(decoration: BoxDecoration(
-                              //color: Colors.white
-                            ),
-                              height: screenH * 0.05,
-                              width: screenW,
-                              child: Center(
-                                child: Text('Expenses Categories',
-                                  style: TextStyle(fontWeight: FontWeight.bold,
-                                      fontSize: 25 ),
+                            Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: Colors.black26
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                              ),
-                            ),
-                            Container(
-                              width: screenW * 0.98 ,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Colors.black12,
-                                  width: 2,
-                                ),
+                                //shadowColor: Colors.white70,
+                                elevation: 5,
                                 color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: pie.PieChart(
-                                  dataMap: expenseCategories,
-                                  colorList:  [
-                                    Colors.blue.shade300,
-                                    Colors.greenAccent,
-                                    Colors.red.shade200,
-                                    Colors.grey,
-                                    Colors.purple,
-                                    Colors.deepPurple,
-                                    Colors.orangeAccent,
-                                    Colors.yellow.shade200,
-                                    Colors.black12,
-                                    Colors.teal,
-                                    Colors.cyan,
-                                    Colors.lime.shade800],
-                                  chartRadius: screenW/2,
-                                  chartType: pie.ChartType.ring,
-                                  ringStrokeWidth: 25,
+                              // Container(
+                              //   width: screenW * 0.98 ,
+                              //   height: screenH * 0.4,
+                              //   decoration: BoxDecoration(
+                              //     borderRadius: BorderRadius.circular(10),
+                              //     border: Border.all(
+                              //       color: Colors.black12,
+                              //       width: 2,
+                              //     ),
+                              //     color: Colors.white,
+                              //   ),
+
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: screenH * 0.01,
+                                    ),
+                                    Container(decoration: BoxDecoration(
+                                      //color: Colors.white
+                                    ),
+                                      height: screenH * 0.05,
+                                      width: screenW,
+                                      child: Center(
+                                        child: Text('Expenses Types',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 25,
+                                              color: Colors.blueGrey[700]),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: pie.PieChart(
+                                        dataMap: catMap,
+                                        colorList:  [
+                                          Colors.white,
+                                          Colors.blue.shade300,
+                                          Colors.blueGrey,
+                                          Colors.greenAccent,
+                                          Colors.red.shade200,
+                                          Colors.grey,
+                                          Colors.purple,
+                                          Colors.deepPurple,
+                                          Colors.orangeAccent,
+                                          Colors.yellow.shade200,
+                                          Colors.black12,
+                                          Colors.teal,
+                                          Colors.cyan,
+                                          Colors.orange,
+                                          Colors.lime.shade800],
+                                        chartRadius: screenW/1.7,
+                                        chartType: pie.ChartType.ring,
+                                        ringStrokeWidth: 25,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: screenH * 0.03,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

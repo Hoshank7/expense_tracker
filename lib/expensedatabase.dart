@@ -1,9 +1,6 @@
 
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-//import 'package:path_provider/path_provider.dart';
-
-
 
 class SqlDB {
 
@@ -16,12 +13,9 @@ class SqlDB {
     if (_db == null) {
       _db = await initialDB();
       return _db;
-
     } else {
       return _db;
     }
-
-
   }
 
   initialDB() async {
@@ -29,7 +23,7 @@ class SqlDB {
     String databasePath= await getDatabasesPath();
     String path = join(databasePath, 'expenses.db');  // expenses is the database name
 
-    Database myDB = await openDatabase(path, onCreate: _onCreate, version: 1, onUpgrade: _onUpgrade);
+    Database myDB = await openDatabase(path, onCreate: _onCreate, version: 2, onUpgrade: _onUpgrade);
     return myDB;
 
   }
@@ -64,16 +58,30 @@ class SqlDB {
      )
         ''');
 
+    await db.execute('''
+    
+    CREATE TABLE catTable (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    category TEXT
+     )
+        ''');
+
+
+
     await db.execute("INSERT INTO expensesTable ('date','amount') VALUES ('$firstDate','0')");
 
     await db.execute("INSERT INTO settingsTable ('currency','target') VALUES ('AED','0')");
 
+    await db.execute('''
+    INSERT INTO catTable ('category') VALUES 
+    ('General'), ('Fuel'), ('Grocery'), ('Cafe'),('Restaurant'),('Shopping'),
+    ('Medicine'),('GYM'),('Activities'),('Parking'),('Utilities'),('Mobile Bill')
+    ''');
+
     print('Databases Created =====================');
   }
 
-
   // below are operations functions of the database which will be used to handle the database
-
   readData(String sql) async {
     Database? mydb = await db;
     List<Map> response = await mydb!.rawQuery(sql);

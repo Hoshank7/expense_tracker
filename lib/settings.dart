@@ -1,6 +1,8 @@
 import 'package:expense_tracker/expensedatabase.dart';
 import 'package:expense_tracker/main.dart';
+//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:expense_tracker/categories.dart';
 
 class Settings extends StatefulWidget {
   final target;
@@ -38,12 +40,12 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: 'DoppioOne-Regular'),
+      theme: ThemeData(fontFamily: 'RobotoCondensed-Light'),
       home: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueGrey[50],
         appBar: AppBar(
-          backgroundColor: Colors.red[700],
+          backgroundColor: Colors.red[900],
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () async {
@@ -57,7 +59,7 @@ class _SettingsState extends State<Settings> {
               Navigator.pushReplacement(
                   context, MaterialPageRoute(builder: (context) => MyApp()));
 
-              print(response);
+              print('Settings Update Response is: $response');
               print('Settings Updated ====================');
             },
           ),
@@ -76,7 +78,7 @@ class _SettingsState extends State<Settings> {
                 ),
                 Row(
                   children: const [
-                    Icon(Icons.attach_money_outlined),
+                    Icon(Icons.attach_money_outlined,size: 30,),
                     SizedBox(
                       width: 11,
                     ),
@@ -110,7 +112,7 @@ class _SettingsState extends State<Settings> {
                   controller: targetController,
                   decoration: const InputDecoration(
                     label: Text('Target Monthly Expenses'),
-                    icon: Icon(Icons.bar_chart),
+                    icon: Icon(Icons.bar_chart,size: 30,),
                   ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -121,6 +123,36 @@ class _SettingsState extends State<Settings> {
                       return null;
                     }
                   },
+                ),
+                const SizedBox(
+                  height: 11,
+                ),
+                Row(
+                  children: [
+                    const Icon(Icons.edit_note_outlined,size: 35,),
+                    TextButton(onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Category()));
+                    },
+                      child: const Text('Edit Expenses Types',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 200,
+                ),
+                const Center(
+                  child: Text('HK Development (C)',
+                    style: TextStyle(
+                      color: Color.fromRGBO(117, 115, 114, 1)
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -25,16 +25,16 @@ class _EditState extends State<Edit> {
     //double screenH = MediaQuery.of(context).size.height;
 
     return MaterialApp(
-      theme: ThemeData(fontFamily: 'DoppioOne-Regular'),
+      theme: ThemeData(fontFamily: 'RobotoCondensed-Light'),
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Colors.red[900],
           title: const Text('Edit Expenses'),
           leading: IconButton(
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => MyApp()),
+                  MaterialPageRoute(builder: (context) => const MyApp()),
                 );
               },
               icon: const Icon(Icons.arrow_back)),
@@ -54,8 +54,8 @@ class _EditState extends State<Edit> {
                         itemBuilder: (context, i) {
                         return Card(
                           child: ListTile(
-                            title: Text('${snapshot.data!.elementAt(i)['category']}'),
-                            subtitle: Text('${snapshot.data!.elementAt(i)['date']}'),
+                            title: Text('Type: ${snapshot.data!.elementAt(i)['category']}'),
+                            subtitle: Text('Date: ${snapshot.data!.elementAt(i)['date']}'),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -71,14 +71,14 @@ class _EditState extends State<Edit> {
                                      ),
                                    ),
                                   );
-                                }, icon: const Icon(Icons.edit,color: Colors.blueAccent,)),
+                                }, icon: const Icon(Icons.edit,color: Colors.blueGrey,size: 30,)),
                                 IconButton(onPressed: () async {
                                   int response= await sqlDB.deleteData('''
                                   DELETE FROM expensesTable WHERE id = ${snapshot.data!.elementAt(i)['id']}''');
                                   if (response > 0) {
                                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const Edit()));
                                   }
-                                }, icon: const Icon(Icons.delete,color: Colors.redAccent,))
+                                }, icon: const Icon(Icons.delete,color: Colors.redAccent,size: 30,))
                               ],
                             ),
                             ),

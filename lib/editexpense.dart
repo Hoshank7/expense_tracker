@@ -23,8 +23,24 @@ class _EditExpense extends State<EditExpense> {
   final formkey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final catTypes = ['Type 1', 'Type 2', 'Type 3'];
+  List<String> catTypes = [];
   String? selectedCat;
+
+  Future<List> readCat() async {
+    List cat= await sqlDB.readData("SELECT category from catTable");
+
+    List<String> catList=[];
+
+    cat.forEach((element) {
+      catList.add(element['category']);
+    });
+
+    setState((){
+      catTypes=catList;
+    });
+
+    return cat;
+  }
 
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
     value: item,
@@ -52,7 +68,7 @@ class _EditExpense extends State<EditExpense> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: 'DoppioOne-Regular'),
+      theme: ThemeData(fontFamily: 'RobotoCondensed-Light'),
       home: Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
@@ -66,14 +82,14 @@ class _EditExpense extends State<EditExpense> {
                         category='$selectedCat', 
                         amount='${amountController.text}'
                         WHERE id= ${widget.id}''');
-                print(response);
+                print('Expense Update Response is: $response ==============================');
 
                 if(response>0) {
                 final snackBar =
-                SnackBar(content: Text('Expense Saved'));
+                SnackBar(content: Text('Expense Saved!'));
                 _scaffoldKey.currentState!.showSnackBar(snackBar);
 
-                Future.delayed(Duration(seconds: 2), () {
+                Future.delayed(Duration(milliseconds: 15), () {
                   //Navigator.pop(context);
                   Navigator.pushReplacement(
                       context,
@@ -96,101 +112,111 @@ class _EditExpense extends State<EditExpense> {
             },
           ),
           title: Text('Edit Expense'),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.red[900],
         ),
         body: Container(
           padding: const EdgeInsets.only(left: 40, right: 40),
-          child: Form(
-            key: formkey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 30,
-                ),
-                TextFormField(
-                  controller: dateController,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2022),
-                        lastDate: DateTime(2050));
+          child: FutureBuilder(
+            future: readCat(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if(snapshot.hasData) {
+            return
+             Form(
+              key: formkey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 30,
+                  ),
+                  TextFormField(
+                    controller: dateController,
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2022),
+                          lastDate: DateTime(2040));
 
-                    //_showDatePicker();
-                    if (pickedDate != null) {
-                      setState(() {
-                        dateController.text =
-                        '${pickedDate.year}/${pickedDate.month}/${pickedDate.day}';
-                      });
-                    }
-                  },
-                  decoration: InputDecoration(
-                      labelText: 'Expense Date',
-                      labelStyle: TextStyle(fontSize: 20.0),
-                      icon: Icon(Icons.calendar_today_rounded)),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Expense Date is Required';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: const [
-                    Icon(Icons.list),
-                    SizedBox(
-                      width: 11,
-                    ),
-                    Text(
-                      'Expense Type',
-                      style: TextStyle(fontSize: 15),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
-                  child: DropdownButtonFormField(
-                    items: catTypes.map(buildMenuItem).toList(),
-                    value: selectedCat,
-                    onChanged: (String? value) =>
-                        setState(() => selectedCat = value),
-                    hint: Text('Please select expense type'),
-                    icon: Icon(Icons.arrow_drop_down),
+                      //_showDatePicker();
+                      if (pickedDate != null) {
+                        setState(() {
+                          dateController.text =
+                          '${pickedDate.year}/${pickedDate.month}/${pickedDate.day}';
+                        });
+                      }
+                    },
+                    decoration: InputDecoration(
+                        labelText: 'Expense Date',
+                        labelStyle: TextStyle(fontSize: 20.0),
+                        icon: Icon(Icons.calendar_today_rounded)),
                     validator: (value) {
-                      if (value == null) {
-                        return 'Expense Type is Required!';
+                      if (value!.isEmpty) {
+                        return 'Expense Date is Required';
                       } else {
                         return null;
                       }
                     },
                   ),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: amountController,
-                  decoration: InputDecoration(
-                    labelText: 'Expense Amount',
-                    icon: Icon(Icons.currency_exchange),
+                  SizedBox(height: 20),
+                  Row(
+                    children: const [
+                      Icon(Icons.list),
+                      SizedBox(
+                        width: 11,
+                      ),
+                      Text(
+                        'Expense Type',
+                        style: TextStyle(fontSize: 15),
+                      )
+                    ],
                   ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value!.isEmpty
-                    //||
-                        //!RegExp(r'^[0-9]+$').hasMatch(value)
-                    ) {
-                      return 'Please Enter Expense Amount!';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                SizedBox(height: 30),
-              ],
-            ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40.0),
+                    child: DropdownButtonFormField(
+                      items: catTypes.map(buildMenuItem).toList(),
+                      value: selectedCat,
+                      onChanged: (String? value) =>
+                          setState(() => selectedCat = value),
+                      hint: Text('Please select expense type'),
+                      icon: Icon(Icons.arrow_drop_down),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Expense Type is Required!';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: amountController,
+                    decoration: InputDecoration(
+                      labelText: 'Expense Amount',
+                      icon: Icon(Icons.currency_exchange),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value!.isEmpty
+                      //||
+                          //!RegExp(r'^[0-9]+$').hasMatch(value)
+                      ) {
+                        return 'Please Enter Expense Amount!';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  SizedBox(height: 30),
+                ],
+              ),
+            );
+            } else {
+              return Center(child: Text('Expense Type Was Not Found'));
+              }
+            }
           ),
         ),
       ),
